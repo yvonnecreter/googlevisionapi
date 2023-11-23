@@ -66,6 +66,10 @@ const App = () => {
 
   return (
     <div className="App">
+      <div className="navbar"> <h1 className='head1'>Google Vision AI Toolbox</h1>
+        <a href="logorenamer">Logo Renamer</a>
+      </div>
+      <hr className="solid"></hr>
       <div className='spacer'></div>
       <div className="headersection">
         <h1 className='glowtext head1'>AI Batch Rename</h1>
@@ -83,8 +87,12 @@ const App = () => {
         <div className='spacer'></div>
         <button onClick={downloadOutput}>Convert</button>
       </div>
+      <p className='description'>
+        Simple Webinterface to Tag Pictures with the Logos found in it. <br />  The Website will communicate with google vision to detect the most propable logo in the image and rename it.  <br />
+        <br />  Choose your Files with the first button and click the second to convert and download<br />  <br /> Make sure multiple downloads on this site are enabled when you are selecting more than one.
+      </p>
       <p className="credits">Made by Yvonne Creter, using Google Vision</p>
-    </div>
+    </div >
   );
 }
 

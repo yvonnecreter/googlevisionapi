@@ -4,6 +4,15 @@
   --glow-spread-color-light: rgba(199, 239, 0, 0.3);
   --btn-color: #C7EF00;
   color: #3772FF;
+  --dark: #333333;
+  --distance-side: 25px;
+  --distance-side-content: 75px;
+}
+
+.description {
+  margin: 120px var(--distance-side-content);
+  max-width: 350px;
+  ;
 }
 
 .credits {
@@ -13,7 +22,23 @@
 }
 
 .headersection {
-  margin: 0px 70px;
+  margin: 0px var(--distance-side-content);
+}
+
+
+.navbar {
+  color: var(--dark);
+  margin: 0px var(--distance-side);
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+a:link,
+a:visited {
+  color: var(--dark);
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .App {
@@ -24,6 +49,7 @@
 
 .center {
   text-align: center;
+  max-width: 900px;
 }
 
 .App-logo {
@@ -40,6 +66,11 @@
 .spacer {
   height: 50px;
 }
+
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+
 
 .App-header {
   min-height: 100vh;
