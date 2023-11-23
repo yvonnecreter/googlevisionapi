@@ -7,15 +7,12 @@ const APIKey = "AIzaSyDpkqVcuwpwkwD9KYM7ksPM9D06hcUkoIQ";
 const APIURL = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDpkqVcuwpwkwD9KYM7ksPM9D06hcUkoIQ";
 
 const App = () => {
-  // GET IMAGES
-
   let savedFileName = "";
 
   const imageUpload = (e: any) => {
     const file = e.target.files[0];
     getBase64(file).then(base64 => {
       localStorage["fileBase64"] = base64;
-      console.debug("file stored", base64);
       savedFileName = file.name;
     });
   };
@@ -26,22 +23,24 @@ const App = () => {
     const link = document.createElement('a');
     link.href = url;
     let result = savedFileName;
-
+    let savedFile = localStorage["fileBase64"].split(',')[1];
 
     const requestData = {
       requests: [
         {
           image: {
-            content: localStorage["fileBase64"],
+            content: savedFile
+            // source: {
+            //   imageUri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flogospng.org%2Fdownload%2Fcoca-cola%2Flogo-coca-cola-4096.png&f=1&nofb=1&ipt=3fa7cec9f3780b920188c7abcbdb7d258478fc174f7c26c2f6103ace152993fa&ipo=images"
+            // }
           },
           features: [{
-            type: "LOGO_DETECTION",
-          }],
-        },]
+            type: "LOGO_DETECTION", maxResults: 1
+          }]
+        }]
     };
     const apiResponse = await axios.post(APIURL, requestData);
-    result = apiResponse.data.responses[0].labelAnnotations;
-
+    result = apiResponse.data.responses[0].logoAnnotations[0].description;
 
     link.download = "" + result; //filename
     document.body.appendChild(link);
