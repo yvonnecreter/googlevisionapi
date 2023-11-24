@@ -8,7 +8,7 @@ const APIURL = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDpkqV
 
 const App = () => {
   var savedFiles: any = [];
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
   const imageUpload = (e: any) => {
     try {
@@ -16,11 +16,18 @@ const App = () => {
 
       fileList.forEach((file: any) => {
         if (allowedTypes.includes(file?.type)) {
-          getBase64(file).then(base64 => {
-            savedFiles.push({ img: base64, name: file.name })
-          });
+          const size = (file.size / 1024 / 1024).toFixed(2);
+          if (parseFloat(size) > 10) {
+            alert("File must be smaller than 10 MB.");
+            savedFiles = [];
+            window.location.reload();
+          } else {
+            getBase64(file).then(base64 => {
+              savedFiles.push({ img: base64, name: file.name })
+            });
+          }
         } else {
-          alert("Only JPEG, PNG, and GIF images are allowed.");
+          alert("Only JPEG, PNG, WEBP and GIF images are allowed.");
           savedFiles = [];
           window.location.reload();
         }
@@ -92,6 +99,7 @@ const App = () => {
       </div>
       <div className='spacer'></div>
       <div className='spacer'></div>
+      <div className='spacer'></div>
       <div className='center'>
         <input
           type="file"
@@ -103,8 +111,15 @@ const App = () => {
         <button onClick={downloadOutput}>Convert</button>
       </div>
       <p className='description'>
+        <p style={{ marginBottom: "45px" }}>
+          Max Filesize: 10 MB
+          <br />
+          Allowed Filetypes: jpg, png, gif, webp
+        </p>
         Simple Webinterface to Tag Pictures with the Logos found in it. <br />  The Website will communicate with google vision to detect the most propable logo in the image and rename it.  <br />
         <br />  Choose your Files with the first button and click the second to convert and download<br />  <br /> Make sure multiple downloads on this site are enabled when you are selecting more than one.
+
+
       </p>
       <p className="credits">Made by Yvonne Creter, using Google Vision</p>
     </div >
