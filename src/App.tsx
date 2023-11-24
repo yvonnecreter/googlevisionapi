@@ -7,21 +7,16 @@ const APIKey = "AIzaSyDpkqVcuwpwkwD9KYM7ksPM9D06hcUkoIQ";
 const APIURL = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDpkqVcuwpwkwD9KYM7ksPM9D06hcUkoIQ";
 
 const App = () => {
-  // let savedFiles: any = [];
-  const savedFiles: any = useState([]);
+  const savedFiles: any = [];
 
   const imageUpload = (e: any) => {
     try {
-      // var temp: any = [];
-      // if (savedFiles.length > 0) {
       const fileList = Array.from(e.target.files);
       fileList.forEach((file: any) => {
         getBase64(file).then(base64 => {
           savedFiles.push({ img: base64, name: file.name })
         });
       })
-      // setSavedFiles(savedFiles);
-      // }
     } catch (error) {
       console.error(error)
     }
