@@ -40,7 +40,7 @@ const App = () => {
     }
   };
 
-  var failed = false;
+  var alerterror = false;
 
   const downloadOutput = async () => {
     let v = document.getElementById("imageFile") as HTMLInputElement;
@@ -74,14 +74,16 @@ const App = () => {
           document.body.removeChild(link);
         } catch (error) {
           console.error(error)
-          failed = true;
-          alert(JSON.stringify(error));
+          alerterror = true;
           const err = error as AxiosError;
           err?.request.responseText == "Request payload size exceeds the limit: 41943040 bytes." && alert("file too big")
         }
       })
-      savedFiles = [];
     }
+    savedFiles = [];
+    v.value = "";
+    alerterror && alert("something went wrong...")
+    alerterror = false;
   }
 
 
@@ -118,8 +120,6 @@ const App = () => {
         </p>
         Simple Webinterface to Tag Pictures with the Logos found in it. <br />  The Website will communicate with google vision to detect the most propable logo in the image and rename it.  <br />
         <br />  Choose your Files with the first button and click the second to convert and download<br />  <br /> Make sure multiple downloads on this site are enabled when you are selecting more than one.
-
-
       </p>
       <p className="credits">Made by Yvonne Creter, using Google Vision</p>
     </div >
