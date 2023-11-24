@@ -1,4 +1,4 @@
-# Google Vision API Toolbox
+# Google Vision Toolbox
 
 ## Integrated APIs
 
