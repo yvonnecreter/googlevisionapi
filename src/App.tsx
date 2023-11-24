@@ -33,7 +33,6 @@ const App = () => {
         }
       })
     } catch (error) {
-      alert(JSON.stringify(error));
       console.error(error);
       savedFiles = [];
       window.location.reload();
@@ -68,10 +67,14 @@ const App = () => {
           };
           const apiResponse = await axios.post(APIURL, requestData);
           result = apiResponse.data.responses[0].logoAnnotations[0].description;
-          link.download = "" + result; //filename
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          if (result == "") {
+            alert("no result")
+          } else {
+            link.download = "" + result; //filename
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         } catch (error) {
           console.error(error)
           alerterror = true;
@@ -80,10 +83,10 @@ const App = () => {
         }
       })
     }
-    savedFiles = [];
-    v.value = "";
     alerterror && alert("something went wrong...")
     alerterror = false;
+    savedFiles = [];
+    v.value = "";
   }
 
 
