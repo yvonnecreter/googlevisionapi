@@ -1,60 +1,80 @@
 import React from 'react';
 import { useState } from 'react';
 import './App.css';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const APIKey = "AIzaSyDpkqVcuwpwkwD9KYM7ksPM9D06hcUkoIQ";
 const APIURL = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDpkqVcuwpwkwD9KYM7ksPM9D06hcUkoIQ";
 
 const App = () => {
-  const savedFiles: any = [];
+  var savedFiles: any = [];
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
 
   const imageUpload = (e: any) => {
     try {
       const fileList = Array.from(e.target.files);
+
       fileList.forEach((file: any) => {
-        getBase64(file).then(base64 => {
-          savedFiles.push({ img: base64, name: file.name })
-        });
+        if (allowedTypes.includes(file?.type)) {
+          getBase64(file).then(base64 => {
+            savedFiles.push({ img: base64, name: file.name })
+          });
+        } else {
+          alert("Only JPEG, PNG, and GIF images are allowed.");
+          savedFiles = [];
+          window.location.reload();
+        }
       })
     } catch (error) {
-      console.error(error)
+      alert(JSON.stringify(error));
+      console.error(error);
+      savedFiles = [];
+      window.location.reload();
     }
   };
 
+  var failed = false;
+
   const downloadOutput = async () => {
-    // if (savedFiles.length > 0) {
-    savedFiles.forEach(async (file: any) => {
-      try {
-        let out = dataURLtoFile(file.img, file.name);
-        const url = window.URL.createObjectURL(out);
-        const link = document.createElement('a');
-        link.href = url;
-        let result = file.name;
-        let savedFile = file.img.split(',')[1];
-        const requestData = {
-          requests: [
-            {
-              image: {
-                content: savedFile
-              },
-              features: [{
-                type: "LOGO_DETECTION", maxResults: 1
+    let v = document.getElementById("imageFile") as HTMLInputElement;
+    if (v.value == null || v.value == "") {
+      alert("no files selected")
+    } else {
+      savedFiles.forEach(async (file: any) => {
+        try {
+          let out = dataURLtoFile(file.img, file.name);
+          const url = window.URL.createObjectURL(out);
+          const link = document.createElement('a');
+          link.href = url;
+          let result = file.name;
+          let savedFile = file.img.split(',')[1];
+          const requestData = {
+            requests: [
+              {
+                image: {
+                  content: savedFile
+                },
+                features: [{
+                  type: "LOGO_DETECTION", maxResults: 1
+                }]
               }]
-            }]
-        };
-        const apiResponse = await axios.post(APIURL, requestData);
-        result = apiResponse.data.responses[0].logoAnnotations[0].description;
-        link.download = "" + result; //filename
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error(error)
-      }
-    })
-    // setSavedFiles([]);
-    // }
+          };
+          const apiResponse = await axios.post(APIURL, requestData);
+          result = apiResponse.data.responses[0].logoAnnotations[0].description;
+          link.download = "" + result; //filename
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (error) {
+          console.error(error)
+          failed = true;
+          alert(JSON.stringify(error));
+          const err = error as AxiosError;
+          err?.request.responseText == "Request payload size exceeds the limit: 41943040 bytes." && alert("file too big")
+        }
+      })
+      savedFiles = [];
+    }
   }
 
 
