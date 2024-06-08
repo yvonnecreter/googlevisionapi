@@ -1,11 +1,14 @@
 # Google Vision Toolbox
 
+# Important
+
+The API is inactive, but you can clone the repository and insert your own key.
+I made this repository public anyways since I coudln't find any public code examples that were Vision with NodeJs.
+Besides, Google Vision should by now have been replaced with Vertex AI.
+
 ## Integrated APIs
 
 Google Vision Logo Detection
-
-
-
 
 ## How to run the source code locally
 To change API token and run the code locally
